@@ -1,22 +1,14 @@
-import base64
 import os
-import pickle
-
 import streamlit as st
 from dotenv import load_dotenv
-from langchain.callbacks import get_openai_callback
 from langchain.chains import ConversationalRetrievalChain
-from langchain.chains.question_answering import load_qa_chain
 from langchain.chat_models import ChatOpenAI
-from langchain.embeddings import (HuggingFaceInstructEmbeddings,
-                                  OpenAIEmbeddings)
+from langchain.embeddings import (OpenAIEmbeddings)
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.llms import HuggingFaceHub, OpenAI
 from langchain.memory import ConversationBufferMemory
-from langchain.text_splitter import (CharacterTextSplitter,
-                                     RecursiveCharacterTextSplitter)
+from langchain.text_splitter import (RecursiveCharacterTextSplitter)
 from langchain.vectorstores import FAISS
-from PyPDF2 import PdfFileReader, PdfFileWriter, PdfReader
+from PyPDF2 import PdfReader
 from streamlit_extras.add_vertical_space import add_vertical_space
 
 from template import bot_template, css, user_template
@@ -29,7 +21,6 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
 
-
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
@@ -37,6 +28,7 @@ def get_pdf_text(pdf_docs):
         for page in pdf_reader.pages:
             text += page.extract_text()
     return text
+
 
 def get_text_chunks(text):
     text_splitter = RecursiveCharacterTextSplitter(
@@ -82,7 +74,7 @@ def handle_userinput(user_question):
 
 
 def main():
-    st.set_page_config(page_title=" Chat with your PDFs",
+    st.set_page_config(page_title="🤖RUSSELL-BOT 🤖",
                        page_icon=":books:")
     st.write(css, unsafe_allow_html=True)
 
@@ -91,17 +83,16 @@ def main():
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = None
 
-    st.header("📄Chat with multiple PDFs")
+    st.header("💬Chat with your PDFs📄📄")
     user_question = st.text_input("Feel free to ask any questions you have about your PDFs.")
     if user_question:
         handle_userinput(user_question)
 
     with st.sidebar:
-        st.title('🤖RUSSELL-BOT 🤖')
-
         st.subheader("Your pdf documents")
         pdf_docs = st.file_uploader(
-            "Upload your PDF file(s) and click on the 'Process' button.", accept_multiple_files=True)
+            "Upload PDF file(s) and click on the Process", accept_multiple_files=True, type='pdf')
+        st.write(pdf_docs)
         if st.button("Process"):
             with st.spinner("Processing"):
                 # get pdf text
@@ -117,7 +108,7 @@ def main():
                 st.session_state.conversation = get_conversation_chain(
                     vectorstore)
                 
-        add_vertical_space(4)
+        add_vertical_space(3)
         st.markdown('''
             ## About APP:
             - This app is a demo for pdf based chatbot.
