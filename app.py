@@ -63,10 +63,17 @@ def main():
 
         
         # create a folder for store pdf name
-        store_name = pdf.name[:-4]
+        # get pdf name without .pdf
+        db_folder = "db"
+        store_name = "".join(pdf.name.split(".")[:-1]).strip()
+        if not os.path.exists(db_folder):
+            os.mkdir(db_folder)
+        # check if file exists
+        vectorstore_path = os.path.join(db_folder,store_name+".pkl")
+
         
-        if os.path.exists(f"{store_name}.pkl"):
-            with open(f"{store_name}.pkl","rb") as f:
+        if os.path.exists(vectorstore_path):
+            with open(vectorstore_path,"rb") as f:
                 vectorstore = pickle.load(f)
             st.write("File already exists. Embeddings loaded from the your folder (disks)")
         else:
@@ -76,7 +83,7 @@ def main():
             # create a vector store and store the chunks part in db (vector)
             vectorstore = FAISS.from_texts(chunks,embedding=embeddings)
 
-            with open(f"{store_name}.pkl","wb") as f:
+            with open(vectorstore_path,"wb") as f:
                 pickle.dump(vectorstore,f)
             
             st.write("Embedding created and stored in the folder")
