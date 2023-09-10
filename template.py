@@ -28,7 +28,7 @@ css = '''
 bot_template = '''
 <div class="chat-message bot">
     <div class="avatar">
-        <img src="avatars/assistant.png"></div>
+        <img src="https://github.com/russell-ai/QA-chatbot/blob/main/avatars/assistant.png"></div>
     <div class="message">{{MSG}}</div>
 </div>
 '''
@@ -36,7 +36,7 @@ bot_template = '''
 user_template = '''
 <div class="chat-message user">
     <div class="avatar">
-        <img src="avatars/human.png">
+        <img src="https://github.com/russell-ai/QA-chatbot/blob/main/avatars/human.png">
     </div>    
     <div class="message">{{MSG}}</div>
 </div>

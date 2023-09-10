@@ -82,8 +82,6 @@ def handle_userinput(user_question):
 
 
 def main():
-    load_dotenv()
-
     st.set_page_config(page_title=" Chat with your PDFs",
                        page_icon=":books:")
     st.write(css, unsafe_allow_html=True)
@@ -103,7 +101,7 @@ def main():
 
         st.subheader("Your pdf documents")
         pdf_docs = st.file_uploader(
-            "Upload your PDF files and click on the 'Process' button.", accept_multiple_files=True)
+            "Upload your PDF file(s) and click on the 'Process' button.", accept_multiple_files=True)
         if st.button("Process"):
             with st.spinner("Processing"):
                 # get pdf text
