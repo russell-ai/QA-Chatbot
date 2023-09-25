@@ -21,6 +21,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
 
+
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
@@ -32,8 +33,8 @@ def get_pdf_text(pdf_docs):
 
 def get_text_chunks(text):
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size = 1000,
-        chunk_overlap = 200,
+        chunk_size = 128,
+        chunk_overlap = 28,
         length_function = len
     )
     chunks = text_splitter.split_text(text)
@@ -43,7 +44,9 @@ def get_text_chunks(text):
 def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings()
     # embeddings = HuggingFaceInstructEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
-    vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
+    # vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings, dimension)
+    vectorstore = FAISS.from_documents(documents=text_chunks, embedding=embeddings)
+
     return vectorstore
 
 def get_conversation_chain(vectorstore):
@@ -92,7 +95,10 @@ def main():
         st.subheader("Your pdf documents")
         pdf_docs = st.file_uploader(
             "Upload PDF file(s) and click on the Process", accept_multiple_files=True, type='pdf')
-        st.write(pdf_docs)
+
+        # if pdf_docs is not None:
+        #     st.write(pdf_docs.)
+
         if st.button("Process"):
             with st.spinner("Processing"):
                 # get pdf text
@@ -128,3 +134,4 @@ if __name__ == '__main__':
     main()
 
 
+# streamlit run app-v2.py
