@@ -8,3 +8,9 @@ streamlit==1.26.0
 faiss-cpu==1.7.4
 streamlit-extras==0.3.2
 huggingface_hub==0.16.4
+streamlit-chat
+
+
+# huggingface-hub==0.14.1
+# InstructorEmbedding==1.0.1
+# sentence-transformers==2.2.2
